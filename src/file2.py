@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 import dagshub
-dagshub.init(repo_owner='vikashdasXXX', repo_name='YT-MLOPS-Experiments-with-MLFlow', mlflow=True)
+dagshub.init(repo_owner='suraj-5556', repo_name='mlops', mlflow=True)
 
-mlflow.set_tracking_uri("https://dagshub.com/vikashdas770/")
+mlflow.set_tracking_uri("https://dagshub.com/suraj-5556/mlops.mlflow")
 
 # Load Wine dataset
 wine = load_wine()
@@ -25,7 +25,7 @@ max_depth = 8
 n_estimators = 5
 
 # Mention your experiment below
-mlflow.set_experiment('YT-MLOPS-Exp2')
+mlflow.set_experiment('Exp2')
 
 with mlflow.start_run():
     rf = RandomForestClassifier(max_depth=max_depth, n_estimators=n_estimators, random_state=42)
@@ -52,11 +52,14 @@ with mlflow.start_run():
     # log artifacts using mlflow
     mlflow.log_artifact("Confusion-matrix.png")
     mlflow.log_artifact(__file__)
+    import joblib
+    joblib.dump(rf, "rf.pkl")
+    mlflow.log_artifact("rf.pkl")
 
     # tags
-    mlflow.set_tags({"Author": 'Vikash', "Project": "Wine Classification"})
+    mlflow.set_tags({"Author": 'suraj', "Project": "Wine Classification"})
 
     # Log the model
-    mlflow.sklearn.log_model(rf, "Random-Forest-Model")
+    # mlflow.sklearn.log_model(rf, "Random-Forest-Model")
 
     print(accuracy)

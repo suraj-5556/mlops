@@ -4,7 +4,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer
 import pandas as pd
 import mlflow
+import dagshub
+dagshub.init(repo_owner='suraj-5556', repo_name='mlops', mlflow=True)
 
+mlflow.set_tracking_uri("https://dagshub.com/suraj-5556/mlops.mlflow")
 # Load the Breast Cancer dataset
 data = load_breast_cancer()
 X = pd.DataFrame(data.data, columns=data.feature_names)
@@ -75,12 +78,14 @@ with mlflow.start_run() as parent:
 
     # Log source code
     mlflow.log_artifact(__file__)
-
+    import joblib
+    joblib.dump(grid_search.best_estimator_, "rf.pkl")
+    mlflow.log_artifact("rf.pkl")
     # Log the best model
-    mlflow.sklearn.log_model(grid_search.best_estimator_, "random_forest")
+    # mlflow.sklearn.log_model(grid_search.best_estimator_, "random_forest")
 
     # Set tags
-    mlflow.set_tag("author", "Vikash Das")
+    mlflow.set_tag("author", "suraj")
 
     print(best_params)
     print(best_score)
